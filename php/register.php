@@ -25,16 +25,17 @@ if(is_null($response['msg'])){
 		if($stmt->execute()){
 		    include("json.php");
 			jsonData($email,$password,$contact,$userName,$LastName,$FirstName,$dob,$age,"insert");
-			$response["success"]=true;
-			$response["msg"] = "Registration Success";
-			$_SESSION["Password"]=$password;
-			$_SESSION["contact"]=$contact;
-			$_SESSION["UserName"]=$userName;
-			$_SESSION["FirstName"]=$FirstName;
-			$_SESSION["LastName"]=$LastName;
-			$_SESSION["Age"]=$age;
-			$_SESSION["Dob"]=$dob;
-			$_SESSION["Email"]=$email; 
+			$respData=[];
+			$respData["Password"]=$password;
+			$respData["contact"]=$contact;
+			$respData["UserName"]=$userName;
+			$respData["FirstName"]=$FirstName;
+			$respData["LastName"]=$LastName;
+			$respData["Age"]=$age;
+			$respData["Dob"]=$dob;
+			$respData["Email"]=$email; 
+			include("redis.php");
+			$redis->set('Email',$email);
 			include("session.php");
 		}
 		else{
@@ -44,7 +45,7 @@ if(is_null($response['msg'])){
 		$stmt->close();	 
 	}
 	else{
-		$response["msg"]="Registration failed jjj";	
+		$response["msg"]="Registration failed";	
 		echo json_encode($response);
 	}
 }
