@@ -24,8 +24,6 @@ if(is_null($response['msg'])){
 	if($stmt){
 		$stmt->bind_param('sssisiis',$userName,$FirstName,$LastName,$contact,$password,$age,$dob, $email);
 		if($stmt->execute()){
-			$query = "SELECT * FROM sampletable WHERE Email=? LIMIT 1;";
-			$results = selectQuery($db,$email,$query);
 			$response["success"]=true;
 			$response["msg"] = "Registration Success";
 			include("json.php");
