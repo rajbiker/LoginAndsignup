@@ -40,7 +40,7 @@ $(document).ready(function(){
 			setVal(arr);
 		}
 		else{
-		   location.href = '../html/login.html';
+		   location.href = 'html/login.html';
 		}
 	}
 	});
