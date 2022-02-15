@@ -21,14 +21,17 @@ if(!isset($response['msg'])){
 				$smt = $stmt->get_result();
 				if($smt->num_rows > 0){
 					$results = $smt -> fetch_array(MYSQLI_ASSOC);
-					$_SESSION["Password"]=$results['Password'];
-					$_SESSION["contact"]=$results['contact'];
-					$_SESSION["UserName"]=$results['UserName'];
-					$_SESSION["FirstName"]=$results['FirstName'];
-					$_SESSION["LastName"]=$results['LastName'];
-					$_SESSION["Age"]=$results['Age'];
-					$_SESSION["Dob"]=$results['Dob'];
-					$_SESSION["Email"]=$results['Email']; 
+					$respData=[];
+					$respData["Password"]=$results['Password'];
+					$respData["contact"]=$results['contact'];
+					$respData["UserName"]=$results['UserName'];
+					$respData["FirstName"]=$results['FirstName'];
+					$respData["LastName"]=$results['LastName'];
+					$respData["Age"]=$results['Age'];
+					$respData["Dob"]=$results['Dob'];
+					$respData["Email"]=$results['Email']; 
+					include('redis.php');
+					$redis->set("Email",$results['Email']);
 					include("session.php");
 				}
 				else{
