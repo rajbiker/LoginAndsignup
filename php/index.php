@@ -1,11 +1,12 @@
 <?php
 include("connection.php");
 include("validate.php");
+include("redis.php");
 $val = new validate();
 $response =[];
 $response["success"] =false;
 $ret = specialCharcheck($db);
-$email = $_SESSION['Email'];
+$email = $redis->get('Email');
 $password = $ret['password'];
 $contact = $ret['contact'];
 $userName = $ret['UserName'];
@@ -23,19 +24,21 @@ if(is_null($response['msg'])){
 	$stmt = $db->prepare($query);
 	if($stmt){
 		$stmt->bind_param('sssisiis',$userName,$FirstName,$LastName,$contact,$password,$age,$dob, $email);
-		if($stmt->execute()){
+		if($stmt->execute()){	
 			$response["success"]=true;
 			$response["msg"] = "Registration Success";
 			include("json.php");
-			jsonData($email,$password,$contact,$userName,$LastName,$FirstName,$dob,$age,"update");	
-			$_SESSION["Password"]=$password;
-			$_SESSION["contact"]=$contact;
-			$_SESSION["UserName"]=$userName;
-			$_SESSION["FirstName"]=$FirstName;
-			$_SESSION["LastName"]=$LastName;
-			$_SESSION["Age"]=$age;
-			$_SESSION["Dob"]=$dob;
-			$_SESSION["Email"]=$email; 
+			jsonData($email,$password,$contact,$userName,$LastName,$FirstName,$dob,$age,"update");
+			$redis->set('Email',$email);
+			$respData=[];
+			$respData["Password"]=$password;
+			$respData["contact"]=$contact;
+			$respData["UserName"]=$userName;
+			$respData["FirstName"]=$FirstName;
+			$respData["LastName"]=$LastName;
+			$respData["Age"]=$age;
+			$respData["Dob"]=$dob;
+			$respData["Email"]=$email; 
 			include("session.php");
 		}
 		else{
