@@ -1,8 +1,8 @@
 <?php
+include('redis.php');
 $response = [];
-session_start();
-if(isset($_SESSION['Email']) && $_SESSION['Email'] == $email){
-	$response["data"]=$_SESSION;
+if($redis->get('Email')){
+	$response["data"]=$respData;
 	$response["success"]=true;
 	echo json_encode($response);
 }
